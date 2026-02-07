@@ -64,7 +64,7 @@
 
         /* Zoom specific styles */
         #canvasViewport {
-            touch-action: none; /* Disable default browser touch actions (scrolling) inside the canvas area */
+            /* touch-action: none;  REMOVED to allow page scroll when not zoomed */
             cursor: grab;
         }
         #canvasViewport:active {
@@ -299,7 +299,7 @@
                 <!-- Canvas Container (Responsive Height) -->
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex-grow flex flex-col relative min-h-[500px] lg:min-h-0 h-full">
                     
-                    <!-- Viewport: Clips the overflow. Changed from items-center to items-start + padding top to show image at top -->
+                    <!-- Viewport: Clips the overflow -->
                     <div id="canvasViewport" class="relative w-full h-full overflow-hidden canvas-bg flex items-start justify-center pt-10">
                         <!-- Transform Target: Scales and moves -->
                         <div id="canvasTransform" class="transition-transform duration-75 ease-out origin-center">
@@ -726,6 +726,10 @@
 
         function startPan(e) {
             if (els.canvas.classList.contains('hidden')) return;
+            
+            // 拡大していないときはドラッグ移動（パン）を無効化し、通常のスクロールなどを優先する
+            if (state.view.scale <= 1.05) return; 
+
             state.view.isDragging = true;
             state.view.lastX = e.clientX;
             state.view.lastY = e.clientY;
