@@ -632,13 +632,14 @@
             reader.readAsDataURL(file);
         }
 
+        // --- Modified: Removed shared anaCanvas to prevent race conditions ---
         async function handleTileImages(files) {
             if (!files.length) return;
             
             // Show Card Overlay
             els.tileLoadingOverlay.classList.remove('hidden');
             els.tileLoadingOverlay.classList.add('flex');
-            els.tileDragOverlay.classList.add('hidden'); // Ensure drag overlay is gone
+            els.tileDragOverlay.classList.add('hidden'); 
             
             setLoading(true, "画像の解析中...", "色空間(CIELAB)へ変換しています");
             
@@ -646,16 +647,13 @@
             let processed = 0;
             const chunkSize = 5;
 
-            // 解析用のCanvas (色取得用)
-            const anaCanvas = document.createElement('canvas');
-            const anaCtx = anaCanvas.getContext('2d');
-            anaCanvas.width = 50; 
-            anaCanvas.height = 50;
+            // Note: Shared canvas removed from here
 
             try {
                 for (let i = 0; i < fileList.length; i += chunkSize) {
                     const chunk = fileList.slice(i, i + chunkSize);
-                    await Promise.all(chunk.map(file => processTile(file, anaCanvas, anaCtx)));
+                    // Modified: Removed shared canvas arguments
+                    await Promise.all(chunk.map(file => processTile(file)));
                     
                     processed += chunk.length;
                     const pct = (processed / fileList.length) * 100;
@@ -676,53 +674,72 @@
             }
         }
 
-        // --- Modified processTile function for memory optimization ---
-        function processTile(file, canvas, ctx) {
+        // --- Modified processTile function for memory optimization & Race Condition Fix ---
+        function processTile(file) { 
             return new Promise(resolve => {
                 if (!file.type.startsWith('image/')) { resolve(); return; }
                 
+                // Create Independent Analysis Canvas per Tile (Prevents Race Conditions)
+                const anaCanvas = document.createElement('canvas');
+                const anaCtx = anaCanvas.getContext('2d');
+                anaCanvas.width = 50; 
+                anaCanvas.height = 50;
+
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    const tempImg = new Image(); // 一時的な画像オブジェクト
-                    tempImg.onload = () => {
-                        // 1. 色解析（既存の処理）
-                        ctx.drawImage(tempImg, 0, 0, canvas.width, canvas.height);
-                        const rgb = getSmartAverageColor(ctx, 0, 0, canvas.width, canvas.height);
-                        const lab = ColorUtils.rgbToLab(rgb.r, rgb.g, rgb.b);
-                        
-                        // 2. 【追加】保存用サムネイルの作成
-                        // モザイクのピースとして十分なサイズ（150px）に縮小
-                        const thumbSize = 150; 
-                        const thumbCanvas = document.createElement('canvas');
-                        thumbCanvas.width = thumbSize;
-                        thumbCanvas.height = thumbSize;
-                        const thumbCtx = thumbCanvas.getContext('2d');
-                        
-                        // 画像をサムネイルサイズに描画（単純伸縮）
-                        thumbCtx.drawImage(tempImg, 0, 0, thumbSize, thumbSize);
+                    const tempImg = new Image(); 
+                    tempImg.onload = async () => { // async added for decode
+                        try {
+                            // 1. Color Analysis
+                            anaCtx.drawImage(tempImg, 0, 0, anaCanvas.width, anaCanvas.height);
+                            const rgb = getSmartAverageColor(anaCtx, 0, 0, anaCanvas.width, anaCanvas.height);
+                            const lab = ColorUtils.rgbToLab(rgb.r, rgb.g, rgb.b);
+                            
+                            // 2. Optimized Thumbnail Creation
+                            // Reduced size to 100px for memory safety on mobile
+                            const thumbSize = 100; 
+                            const thumbCanvas = document.createElement('canvas');
+                            thumbCanvas.width = thumbSize;
+                            thumbCanvas.height = thumbSize;
+                            const thumbCtx = thumbCanvas.getContext('2d');
+                            
+                            // Better Thumbnail: Center Crop (Aspect Ratio Preserved)
+                            const scale = Math.max(thumbSize / tempImg.width, thumbSize / tempImg.height);
+                            const x = (thumbSize - tempImg.width * scale) / 2;
+                            const y = (thumbSize - tempImg.height * scale) / 2;
+                            thumbCtx.drawImage(tempImg, x, y, tempImg.width * scale, tempImg.height * scale);
 
-                        // 3. メモリ軽量な新しい画像オブジェクトを作成
-                        // データURL化（JPEG低画質）して再生成することで、元画像のメモリ参照を切る
-                        const thumbDataUrl = thumbCanvas.toDataURL('image/jpeg', 0.8);
+                            // 3. Create Lightweight Image Object
+                            const thumbDataUrl = thumbCanvas.toDataURL('image/jpeg', 0.8);
 
-                        const finalThumbImg = new Image();
-                        finalThumbImg.onload = () => {
+                            const finalThumbImg = new Image();
+                            finalThumbImg.width = thumbSize;
+                            finalThumbImg.height = thumbSize;
+                            finalThumbImg.src = thumbDataUrl;
+
+                            // Wait for decode to ensure image is ready for canvas drawing
+                            try {
+                                await finalThumbImg.decode();
+                            } catch(e) {
+                                console.warn("Image decode warning", e);
+                            }
+
                             state.tiles.push({
                                 id: Math.random().toString(36).substr(2, 9),
-                                img: finalThumbImg, // ← 縮小版を保存
+                                img: finalThumbImg, 
                                 rgb: rgb,
                                 lab: lab
                             });
-                            
-                            // メモリ解放の助け
+                        } catch(err) {
+                            console.error("Tile processing error:", err);
+                        } finally {
+                             // Memory Cleanup
                             if (tempImg.src.startsWith('blob:')) {
                                 URL.revokeObjectURL(tempImg.src);
                             }
-                            // 参照を切る
                             tempImg.src = "";
                             resolve();
-                        };
-                        finalThumbImg.src = thumbDataUrl;
+                        }
                     };
                     tempImg.onerror = resolve;
                     tempImg.src = e.target.result;
