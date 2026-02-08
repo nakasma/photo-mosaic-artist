@@ -300,9 +300,11 @@
                 <div id="previewCard" class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex-grow flex flex-col relative min-h-[300px] lg:min-h-0 lg:h-full transition-all duration-300">
                     
                     <!-- Viewport: Clips the overflow -->
-                    <div id="canvasViewport" class="relative w-full h-full overflow-hidden canvas-bg flex items-start justify-center pt-10">
+                    <!-- Changed: items-start -> items-center, removed pt-10 to force true centering -->
+                    <div id="canvasViewport" class="relative w-full h-full overflow-hidden canvas-bg flex items-center justify-center">
                         <!-- Transform Target: Scales and moves -->
-                        <div id="canvasTransform" class="transition-transform duration-75 ease-out origin-top">
+                        <!-- Changed: origin-top -> origin-center for correct scaling from center -->
+                        <div id="canvasTransform" class="transition-transform duration-75 ease-out origin-center">
                             <!-- Canvas itself (no max-width constraint to allow zoom) -->
                             <canvas id="mosaicCanvas" class="shadow-2xl hidden"></canvas>
                         </div>
@@ -776,7 +778,7 @@
             if (els.canvas.classList.contains('hidden')) return;
             
             // 拡大していないときはドラッグ移動（パン）を無効化し、通常のスクロールなどを優先する
-            if (state.view.scale <= 1.05) return; 
+            // if (state.view.scale <= 1.05) return; // Removed this check to allow panning if zoomed in even slightly, or handled by constraints
 
             state.view.isDragging = true;
             state.view.lastX = e.clientX;
@@ -790,8 +792,20 @@
             const dx = e.clientX - state.view.lastX;
             const dy = e.clientY - state.view.lastY;
             
-            state.view.x += dx;
-            state.view.y += dy;
+            // Apply constraints immediately during movement
+            const currentW = els.canvas.width * state.view.scale;
+            const currentH = els.canvas.height * state.view.scale;
+            const vw = els.canvasViewport.clientWidth;
+            const vh = els.canvasViewport.clientHeight;
+
+            // Only allow panning if the image is larger than the viewport
+            if (currentW > vw) {
+                state.view.x += dx;
+            }
+            if (currentH > vh) {
+                state.view.y += dy;
+            }
+            
             state.view.lastX = e.clientX;
             state.view.lastY = e.clientY;
             
@@ -857,6 +871,15 @@
         }
 
         function updateTransform() {
+            // Apply centering logic: if image fits in viewport, force center (x=0, y=0)
+            const currentW = els.canvas.width * state.view.scale;
+            const currentH = els.canvas.height * state.view.scale;
+            const vw = els.canvasViewport.clientWidth;
+            const vh = els.canvasViewport.clientHeight;
+
+            if (currentW <= vw) state.view.x = 0;
+            if (currentH <= vh) state.view.y = 0;
+
             const { x, y, scale } = state.view;
             els.canvasTransform.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
         }
