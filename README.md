@@ -1,5 +1,3 @@
-# photo-mosaic-artist
-フォトモザイクアート生成アプリケーション
 # Photo Mosaic Artist
 
 **Photo Mosaic Artist** は、ブラウザ上で動作する高機能なフォトモザイクアート生成アプリケーションです。
