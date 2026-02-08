@@ -457,6 +457,7 @@
             // Zoom State
             view: {
                 scale: 1,
+                fitScale: 1, // 追加: 画面フィット時の基準スケール
                 x: 0,
                 y: 0,
                 isDragging: false,
@@ -777,8 +778,9 @@
         function startPan(e) {
             if (els.canvas.classList.contains('hidden')) return;
             
-            // 拡大していないときはドラッグ移動（パン）を無効化し、通常のスクロールなどを優先する
-            // if (state.view.scale <= 1.05) return; // Removed this check to allow panning if zoomed in even slightly, or handled by constraints
+            // 修正: フィット状態（またはそれ以下）の場合はドラッグを開始しない
+            // わずかな計算誤差を許容するため 1.01倍 を閾値とする
+            if (state.view.scale <= state.view.fitScale * 1.01) return;
 
             state.view.isDragging = true;
             state.view.lastX = e.clientX;
@@ -792,18 +794,33 @@
             const dx = e.clientX - state.view.lastX;
             const dy = e.clientY - state.view.lastY;
             
-            // Apply constraints immediately during movement
+            // 現在の表示サイズとビューポートサイズを取得
             const currentW = els.canvas.width * state.view.scale;
             const currentH = els.canvas.height * state.view.scale;
             const vw = els.canvasViewport.clientWidth;
             const vh = els.canvasViewport.clientHeight;
 
-            // Only allow panning if the image is larger than the viewport
+            // 修正: 移動範囲の制限（Clamping）を追加
+            // 画像が画面端から離れないようにする最大移動量を計算
+            const maxTranslateX = Math.max(0, (currentW - vw) / 2);
+            const maxTranslateY = Math.max(0, (currentH - vh) / 2);
+
+            // X軸の移動と制限
             if (currentW > vw) {
                 state.view.x += dx;
+                // 移動量が限界を超えないように制限
+                state.view.x = Math.max(-maxTranslateX, Math.min(maxTranslateX, state.view.x));
+            } else {
+                state.view.x = 0; // 収まっている場合は強制的に中央
             }
+
+            // Y軸の移動と制限
             if (currentH > vh) {
                 state.view.y += dy;
+                // 移動量が限界を超えないように制限
+                state.view.y = Math.max(-maxTranslateY, Math.min(maxTranslateY, state.view.y));
+            } else {
+                state.view.y = 0; // 収まっている場合は強制的に中央
             }
             
             state.view.lastX = e.clientX;
@@ -814,18 +831,41 @@
 
         function endPan() {
             state.view.isDragging = false;
+            // カーソルを戻す際も、ズーム状態に応じて変更すると親切だが、ここでは標準に戻す
             els.canvasViewport.style.cursor = 'grab';
         }
 
         function zoomCanvas(factor) {
             if (els.canvas.classList.contains('hidden')) return;
-            const newScale = state.view.scale * factor;
             
-            // Limit scale
-            if (newScale < 0.05 || newScale > 20) return;
+            let newScale = state.view.scale * factor;
+            
+            // 修正: 縮小しすぎないように制限（フィットサイズより小さくしない）
+            // ただし、0.95倍程度までは許容して「バウンド」感を出すのもありだが、
+            // ここではフィットサイズを下限とする
+            if (newScale < state.view.fitScale) newScale = state.view.fitScale;
+            if (newScale > 20) newScale = 20; // 上限は維持
             
             state.view.scale = newScale;
+            
+            // ズームアウト時に移動位置が範囲外に残らないように位置を再調整（Clamp）
+            clampPosition();
+            
             updateTransform();
+        }
+
+        // 新規追加: ズーム操作時などに位置が範囲外に行かないよう補正する関数
+        function clampPosition() {
+            const currentW = els.canvas.width * state.view.scale;
+            const currentH = els.canvas.height * state.view.scale;
+            const vw = els.canvasViewport.clientWidth;
+            const vh = els.canvasViewport.clientHeight;
+
+            const maxTranslateX = Math.max(0, (currentW - vw) / 2);
+            const maxTranslateY = Math.max(0, (currentH - vh) / 2);
+
+            state.view.x = Math.max(-maxTranslateX, Math.min(maxTranslateX, state.view.x));
+            state.view.y = Math.max(-maxTranslateY, Math.min(maxTranslateY, state.view.y));
         }
 
         function resetZoom() {
@@ -847,12 +887,11 @@
 
             const vw = els.canvasViewport.clientWidth;
             
-            // Mobile optimization: Adjust container height to fit image
+            // Mobile optimization
             if (window.innerWidth < 1024) {
                 const aspect = cw / ch;
-                // Calculate ideal height, maxing out at 60vh
                 const idealHeight = Math.min(vw / aspect, window.innerHeight * 0.6);
-                const targetHeight = Math.max(300, idealHeight); // Min 300px
+                const targetHeight = Math.max(300, idealHeight); 
                 els.previewCard.style.height = `${targetHeight}px`;
             }
 
@@ -864,6 +903,7 @@
             const scale = Math.min(scaleX, scaleY);
             
             state.view.scale = scale;
+            state.view.fitScale = scale; // 修正: 基準スケールを保存
             state.view.x = 0;
             state.view.y = 0;
             
@@ -871,21 +911,19 @@
         }
 
         function updateTransform() {
-            // Apply centering logic: if image fits in viewport, force center (x=0, y=0)
-            const currentW = els.canvas.width * state.view.scale;
-            const currentH = els.canvas.height * state.view.scale;
-            const vw = els.canvasViewport.clientWidth;
-            const vh = els.canvasViewport.clientHeight;
-
-            if (currentW <= vw) state.view.x = 0;
-            if (currentH <= vh) state.view.y = 0;
-
+            // movePanやclampPositionで座標制御しているため、ここでは単純に適用するだけで良い
             const { x, y, scale } = state.view;
             els.canvasTransform.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+            
+            // ズーム状態に応じてカーソルスタイルを変更（UX向上）
+            if (scale > state.view.fitScale * 1.01) {
+                els.canvasViewport.style.cursor = state.view.isDragging ? 'grabbing' : 'grab';
+            } else {
+                els.canvasViewport.style.cursor = 'default';
+            }
         }
 
-        // --- Core Generation Logic ---
-
+        // --- Core Generation Logic (Restored) ---
         async function generateMosaic() {
             if (!state.mainImage) return;
             
