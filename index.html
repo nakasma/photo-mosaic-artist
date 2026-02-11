@@ -17,7 +17,7 @@
                 extend: {
                     fontFamily: {
                         sans: ['"Noto Sans JP"', 'sans-serif'],
-                        teko: ['"Teko"', 'sans-serif'], // Added Teko font
+                        teko: ['"Teko"', 'sans-serif'],
                     },
                     colors: {
                         primary: {
@@ -62,9 +62,7 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Zoom specific styles */
         #canvasViewport {
-            /* touch-action: none;  REMOVED to allow page scroll when not zoomed */
             cursor: grab;
         }
         #canvasViewport:active {
@@ -109,44 +107,24 @@
     <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3 group cursor-pointer" onclick="location.reload()">
-                <!-- Artistic Mosaic Icon -->
                 <div class="w-10 h-10 grid grid-cols-3 gap-0.5 rounded-lg overflow-hidden shadow-sm group-hover:shadow-md transition-all group-hover:rotate-3 flex-shrink-0">
                     <div class="bg-rose-500"></div><div class="bg-orange-500"></div><div class="bg-amber-500"></div>
                     <div class="bg-emerald-500"></div><div class="bg-cyan-500"></div><div class="bg-blue-500"></div>
                     <div class="bg-indigo-500"></div><div class="bg-violet-500"></div><div class="bg-fuchsia-500"></div>
                 </div>
                 
-                <!-- Artistic Title (Teko Font, Mosaic Coloring) -->
                 <h1 class="font-teko text-3xl sm:text-4xl font-medium tracking-wide leading-none flex items-baseline gap-1.5 select-none transform translate-y-0.5">
-                    <!-- PHOTO: Warm Tones -->
                     <div class="flex">
-                        <span class="text-rose-500">P</span>
-                        <span class="text-orange-500">H</span>
-                        <span class="text-amber-500">O</span>
-                        <span class="text-yellow-500">T</span>
-                        <span class="text-lime-500">O</span>
+                        <span class="text-rose-500">P</span><span class="text-orange-500">H</span><span class="text-amber-500">O</span><span class="text-yellow-500">T</span><span class="text-lime-500">O</span>
                     </div>
-                    <!-- MOSAIC: Cool Tones -->
                     <div class="flex">
-                        <span class="text-emerald-500">M</span>
-                        <span class="text-teal-500">O</span>
-                        <span class="text-cyan-500">S</span>
-                        <span class="text-sky-500">A</span>
-                        <span class="text-blue-500">I</span>
-                        <span class="text-indigo-500">C</span>
+                        <span class="text-emerald-500">M</span><span class="text-teal-500">O</span><span class="text-cyan-500">S</span><span class="text-sky-500">A</span><span class="text-blue-500">I</span><span class="text-indigo-500">C</span>
                     </div>
-                    <!-- ARTIST: Purple/Mix Tones -->
                     <div class="flex">
-                        <span class="text-violet-500">A</span>
-                        <span class="text-purple-500">R</span>
-                        <span class="text-fuchsia-500">T</span>
-                        <span class="text-pink-500">I</span>
-                        <span class="text-rose-400">S</span>
-                        <span class="text-red-500">T</span>
+                        <span class="text-violet-500">A</span><span class="text-purple-500">R</span><span class="text-fuchsia-500">T</span><span class="text-pink-500">I</span><span class="text-rose-400">S</span><span class="text-red-500">T</span>
                     </div>
                 </h1>
             </div>
-            
             <div></div>
         </div>
     </header>
@@ -158,19 +136,15 @@
             <!-- Settings Panel -->
             <div class="lg:col-span-4 space-y-6">
                 
-                <!-- 1. Main Image (Full Card Dropzone) -->
+                <!-- 1. Main Image -->
                 <div id="mainStepCard" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 step-card relative overflow-hidden transition-colors">
-                    
-                    <!-- Drag Overlay (Step 1) -->
                     <div id="mainDragOverlay" class="absolute inset-0 bg-primary-50/95 z-50 hidden flex-col items-center justify-center backdrop-blur-sm border-2 border-primary-500 border-dashed rounded-2xl pointer-events-none">
-                        <!-- Restored Original Icon -->
                         <i data-lucide="image-plus" class="w-12 h-12 text-primary-600 mb-3"></i>
                         <p class="text-lg font-bold text-primary-700">メイン写真を変更</p>
                         <p class="text-sm text-primary-600 mt-1">ここにドロップして更新</p>
                     </div>
 
                     <div class="flex items-center gap-3 mb-4">
-                        <!-- Step 1: Red/Orange Gradient Square -->
                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-rose-400 to-orange-400 flex items-center justify-center text-white font-bold shadow-sm">1</div>
                         <h2 class="text-lg font-bold text-gray-800">メイン写真</h2>
                     </div>
@@ -179,7 +153,6 @@
                         <input type="file" id="mainImageInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
                         <div id="mainImageDropzone" class="border-2 border-dashed border-gray-300 rounded-xl p-6 flex flex-col items-center justify-center text-center transition-colors group-hover:border-primary-500 bg-gray-50 group-hover:bg-primary-50 h-48 relative overflow-hidden">
                             <div id="dropzoneContent" class="flex flex-col items-center">
-                                <!-- Restored Original Icon -->
                                 <i data-lucide="image-plus" class="w-10 h-10 text-gray-400 mb-2 group-hover:text-primary-500"></i>
                                 <p class="text-sm font-medium text-gray-600">メイン写真をドロップ</p>
                             </div>
@@ -188,17 +161,13 @@
                     </div>
                 </div>
 
-                <!-- 2. Tile Images (Full Card Dropzone + Loading Overlay) -->
+                <!-- 2. Tile Images -->
                 <div id="tileStepCard" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 step-card relative overflow-hidden transition-colors">
-                    
-                    <!-- Drag Overlay (Step 2) -->
                     <div id="tileDragOverlay" class="absolute inset-0 bg-primary-50/95 z-50 hidden flex-col items-center justify-center backdrop-blur-sm border-2 border-primary-500 border-dashed rounded-2xl pointer-events-none">
                         <i data-lucide="copy-plus" class="w-12 h-12 text-primary-600 mb-3"></i>
                         <p class="text-lg font-bold text-primary-700">画像をここに追加</p>
-                        <p class="text-sm text-primary-600 mt-1">フレーム内のどこでもOK</p>
                     </div>
 
-                    <!-- Tile Loading Overlay -->
                     <div id="tileLoadingOverlay" class="absolute inset-0 bg-white/90 z-40 hidden flex-col items-center justify-center backdrop-blur-sm rounded-2xl transition-opacity">
                         <div class="loader w-8 h-8 border-primary-500 border-t-transparent mb-3"></div>
                         <p class="text-sm font-bold text-primary-700 animate-pulse">画像を解析中...</p>
@@ -207,32 +176,33 @@
 
                     <div class="flex items-center justify-between gap-3 mb-4">
                         <div class="flex items-center gap-3">
-                            <!-- Step 2: Blue/Cyan Gradient Square -->
                             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-white font-bold shadow-sm">2</div>
                             <h2 class="text-lg font-bold text-gray-800">ピース写真</h2>
                         </div>
                     </div>
 
-                    <!-- New: Quality Selector -->
-                    <div class="mb-3 bg-blue-50/50 p-2.5 rounded-lg border border-blue-100">
-                        <div class="flex items-center justify-between mb-1">
-                            <label for="importQualitySelect" class="text-xs font-bold text-gray-600 flex items-center gap-1">
-                                <i data-lucide="settings-2" class="w-3 h-3"></i> 取り込み画質
+                    <!-- Quality Selector -->
+                    <div class="mb-3 bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="importQualitySelect" class="text-xs font-bold text-gray-700 flex items-center gap-1">
+                                <i data-lucide="settings-2" class="w-3 h-3"></i> ズーム用画質設定
                             </label>
-                            <span class="text-[10px] text-gray-400">※追加前に設定</span>
+                            <span class="text-[10px] text-gray-500 bg-white px-1.5 py-0.5 rounded border border-gray-200">※追加前に選択</span>
                         </div>
-                        <select id="importQualitySelect" class="w-full text-sm bg-white border border-gray-200 text-gray-700 rounded-md py-1.5 px-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none shadow-sm">
-                            <option value="100">軽量 (100px) - メモリ節約</option>
-                            <option value="300" selected>標準 (300px) - 推奨</option>
-                            <option value="600">高画質 (600px) - ズーム向き</option>
-                            <option value="1200">超高画質 (1200px) - PC推奨</option>
+                        <select id="importQualitySelect" class="w-full text-sm bg-white border border-gray-300 text-gray-700 rounded-md py-2 px-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none shadow-sm">
+                            <option value="100">【軽量】100px (動作重視)</option>
+                            <option value="300" selected>【標準】300px (バランス)</option>
+                            <option value="800">【高画質】800px (綺麗にズーム)</option>
+                            <option value="original">【オリジナル】元画像 (PC・Wi-Fi推奨)</option>
                         </select>
+                        <p class="text-[10px] text-gray-500 mt-1.5 leading-tight">
+                            ※「オリジナル」を選択すると、生成時のキャンバスサイズが巨大になり、ズームしても写真がくっきり見えますが、メモリを大量に消費します。
+                        </p>
                     </div>
 
                     <div class="relative group mb-4">
                         <input type="file" id="tileImagesInput" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
                         <div class="border-2 border-dashed border-gray-300 rounded-xl h-32 flex flex-col items-center justify-center gap-3 text-center transition-colors group-hover:border-primary-500 bg-gray-50 group-hover:bg-primary-50">
-                            <!-- Icon removed -->
                             <span class="text-sm font-medium text-gray-600">ピース写真をドロップ</span>
                         </div>
                     </div>
@@ -242,21 +212,17 @@
                         <button id="clearTilesBtn" class="text-xs text-red-500 hover:text-red-700 hidden">クリア</button>
                     </div>
                     
-                    <div id="tilePreviewContainer" class="flex gap-2 overflow-x-auto pb-2 h-16 empty:hidden scrollbar-hide">
-                        <!-- Thumbnails injected here -->
-                    </div>
+                    <div id="tilePreviewContainer" class="flex gap-2 overflow-x-auto pb-2 h-16 empty:hidden scrollbar-hide"></div>
                 </div>
 
                 <!-- 3. Generation Settings -->
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 step-card">
                     <div class="flex items-center gap-3 mb-4">
-                        <!-- Step 3: Purple/Pink Gradient Square -->
                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white font-bold shadow-sm">3</div>
                         <h2 class="text-lg font-bold text-gray-800">生成設定</h2>
                     </div>
 
                     <div class="space-y-5">
-                        <!-- Resolution -->
                         <div>
                             <label class="flex justify-between text-sm font-medium text-gray-700 mb-1">
                                 モザイクの密度
@@ -265,7 +231,6 @@
                             <input type="range" id="resolutionRange" min="20" max="150" value="80" step="10" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600">
                         </div>
 
-                        <!-- Blend -->
                         <div>
                             <label class="flex justify-between text-sm font-medium text-gray-700 mb-1">
                                 元画像のブレンド率
@@ -274,31 +239,23 @@
                             <input type="range" id="blendRange" min="0" max="80" value="10" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600">
                         </div>
 
-                        <!-- Advanced Toggles -->
                         <div class="bg-gray-50 p-3 rounded-lg space-y-3">
-                            <!-- Removed Diversity Checkbox (Always On) -->
-
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="colorCorrectCheck" checked class="w-4 h-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500">
                                 <span class="text-sm text-gray-700 font-medium">色調の自動微調整</span>
                             </label>
                         </div>
                         
-                        <!-- Updated Generate Button with Rainbow UI -->
                         <button id="generateBtn" disabled class="btn-rainbow w-full text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 mt-4 group relative overflow-hidden">
-                            <!-- Shine Effect -->
                             <div class="absolute inset-0 bg-white/20 translate-x-[-100%] skew-x-[-15deg] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
-                            
-                            <!-- Icon removed -->
                             <span id="btnText" class="relative z-10 text-xl tracking-wider drop-shadow-sm font-teko">モザイクアート生成</span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Result Panel (Fixed Height Layout) -->
+            <!-- Result Panel -->
             <div class="lg:col-span-8 flex flex-col gap-4 lg:h-[calc(100vh-8rem)] lg:sticky lg:top-24">
-                <!-- Header with Download Button -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 flex items-center justify-between px-4 flex-shrink-0">
                     <span class="text-base font-bold text-gray-700 flex items-center gap-2">
                         <i data-lucide="monitor" class="w-5 h-5"></i> プレビュー
@@ -313,33 +270,22 @@
                     </div>
                 </div>
 
-                <!-- Canvas Container (Responsive Height) -->
-                <!-- Modified: min-h-[500px] -> min-h-[300px], h-full -> lg:h-full -->
                 <div id="previewCard" class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex-grow flex flex-col relative min-h-[300px] lg:min-h-0 lg:h-full transition-all duration-300">
-                    
-                    <!-- Viewport: Clips the overflow -->
-                    <!-- Changed: items-start -> items-center, removed pt-10 to force true centering -->
                     <div id="canvasViewport" class="relative w-full h-full overflow-hidden canvas-bg flex items-center justify-center">
-                        <!-- Transform Target: Scales and moves -->
-                        <!-- Changed: origin-top -> origin-center for correct scaling from center -->
                         <div id="canvasTransform" class="transition-transform duration-75 ease-out origin-center">
-                            <!-- Canvas itself (no max-width constraint to allow zoom) -->
                             <canvas id="mosaicCanvas" class="shadow-2xl hidden"></canvas>
                         </div>
 
-                        <!-- Empty State -->
                         <div id="emptyState" class="absolute inset-0 flex flex-col items-center justify-center text-center p-8 pointer-events-none">
                             <div class="bg-blue-50 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
                                 <i data-lucide="palette" class="w-12 h-12 text-primary-300"></i>
                             </div>
-                            <!-- Removed: <h3 class="text-lg font-bold text-gray-900 mb-2">準備完了</h3> -->
                             <p class="text-gray-500 text-sm max-w-sm mx-auto leading-relaxed">
                                 写真を選択後、「３生成設定」の『モザイクアート生成』をクリックしてください。<br>
                                 CIELAB色空間アルゴリズムを使用して<br>高精度なモザイクアートを生成します。
                             </p>
                         </div>
 
-                        <!-- Loading Overlay (Main Canvas) -->
                         <div id="loadingOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm z-20 hidden flex-col items-center justify-center">
                             <div class="loader mb-4 w-10 h-10 border-4"></div>
                             <p id="loadingText" class="text-primary-700 font-bold text-lg animate-pulse mb-1">処理中...</p>
@@ -352,7 +298,6 @@
                         </div>
                     </div>
 
-                    <!-- Zoom Controls (Visible when canvas is shown) -->
                     <div id="zoomControls" class="absolute bottom-6 right-6 flex flex-col gap-3 z-10 hidden">
                         <button id="zoomInBtn" class="bg-white/90 backdrop-blur-sm text-gray-700 p-3 rounded-full shadow-lg border border-gray-200 hover:bg-gray-50 active:bg-gray-100 transition-all transform hover:scale-105" title="ズームイン">
                             <i data-lucide="plus" class="w-6 h-6"></i>
@@ -379,9 +324,7 @@
     <script>
         lucide.createIcons();
 
-        // --- Color Science Utilities (CIELAB) ---
         const ColorUtils = {
-            // Convert RGB (0-255) to XYZ
             rgbToXyz: (r, g, b) => {
                 let _r = r / 255, _g = g / 255, _b = b / 255;
                 _r = _r > 0.04045 ? Math.pow((_r + 0.055) / 1.055, 2.4) : _r / 12.92;
@@ -393,8 +336,6 @@
                     z: (_r * 0.0193 + _g * 0.1192 + _b * 0.9505) * 100
                 };
             },
-            
-            // Convert XYZ to CIELAB
             xyzToLab: (x, y, z) => {
                 let _x = x / 95.047, _y = y / 100.000, _z = z / 108.883;
                 _x = _x > 0.008856 ? Math.pow(_x, 1/3) : (7.787 * _x) + 16/116;
@@ -406,14 +347,10 @@
                     b: 200 * (_y - _z)
                 };
             },
-
-            // Wrapper: RGB to LAB
             rgbToLab: (r, g, b) => {
                 const xyz = ColorUtils.rgbToXyz(r, g, b);
                 return ColorUtils.xyzToLab(xyz.x, xyz.y, xyz.z);
             },
-
-            // Calculate Distance (Euclidean in LAB space - dE76)
             deltaE: (lab1, lab2) => {
                 const dl = lab1.l - lab2.l;
                 const da = lab1.a - lab2.a;
@@ -422,38 +359,27 @@
             }
         };
 
-        // --- Multi-Sampling Logic ---
         function getSmartAverageColor(ctx, x, y, w, h) {
             if (w <= 0 || h <= 0) return { r:0, g:0, b:0 };
-            
             const imageData = ctx.getImageData(x, y, w, h);
             const data = imageData.data;
             const len = data.length;
-            
-            let r = 0, g = 0, b = 0;
-            let totalWeight = 0;
-
-            const cx = w / 2;
-            const cy = h / 2;
+            let r = 0, g = 0, b = 0, totalWeight = 0;
+            const cx = w / 2, cy = h / 2;
             const maxDist = Math.sqrt(cx * cx + cy * cy);
-
             for (let i = 0; i < len; i += 4) {
                 const pxIndex = i / 4;
                 const px = pxIndex % w;
                 const py = Math.floor(pxIndex / w);
-
                 const dx = px - cx;
                 const dy = py - cy;
                 const dist = Math.sqrt(dx*dx + dy*dy);
-                
                 const weight = Math.max(0.2, 1 - (dist / maxDist));
-                
                 r += data[i] * weight;
                 g += data[i+1] * weight;
                 b += data[i+2] * weight;
                 totalWeight += weight;
             }
-
             return {
                 r: Math.round(r / totalWeight),
                 g: Math.round(g / totalWeight),
@@ -461,22 +387,20 @@
             };
         }
 
-        // --- Application State ---
         const state = {
             mainImage: null,
-            tiles: [], // { id, img, lab: {l,a,b}, rgb: {r,g,b} }
+            tiles: [], 
             isProcessing: false,
             settings: {
                 tilesX: 80,
                 blend: 0.1,
-                diversity: true, // Always true
+                diversity: true,
                 colorCorrect: true,
-                importResolution: 300 // Default to medium
+                importResolution: 300 // default
             },
-            // Zoom State
             view: {
                 scale: 1,
-                fitScale: 1, // 追加: 画面フィット時の基準スケール
+                fitScale: 1,
                 x: 0,
                 y: 0,
                 isDragging: false,
@@ -485,7 +409,6 @@
             }
         };
 
-        // --- DOM References ---
         const els = {
             mainInput: document.getElementById('mainImageInput'),
             mainPreview: document.getElementById('mainImagePreview'),
@@ -502,20 +425,18 @@
             tileCount: document.getElementById('tileCount'),
             tileContainer: document.getElementById('tilePreviewContainer'),
             clearTilesBtn: document.getElementById('clearTilesBtn'),
-            importQualitySelect: document.getElementById('importQualitySelect'), // New
+            importQualitySelect: document.getElementById('importQualitySelect'),
             
             resolutionRange: document.getElementById('resolutionRange'),
             resolutionValue: document.getElementById('resolutionValue'),
             blendRange: document.getElementById('blendRange'),
             blendValue: document.getElementById('blendValue'),
-            // Removed diversityCheck
             colorCorrectCheck: document.getElementById('colorCorrectCheck'),
             
             generateBtn: document.getElementById('generateBtn'),
             downloadBtn: document.getElementById('downloadBtn'),
             
-            // Zoom & Canvas elements
-            previewCard: document.getElementById('previewCard'), // Added Reference
+            previewCard: document.getElementById('previewCard'),
             canvas: document.getElementById('mosaicCanvas'),
             canvasViewport: document.getElementById('canvasViewport'),
             canvasTransform: document.getElementById('canvasTransform'),
@@ -531,26 +452,21 @@
             progressBar: document.getElementById('progressBar'),
             progressText: document.getElementById('progressText'),
             statusMessage: document.getElementById('statusMessage'),
-            // btnIcon removed
             btnText: document.getElementById('btnText')
         };
 
         // --- Event Listeners ---
-        
-        // --- GLOBAL PROTECTION ---
         window.addEventListener('dragover', (e) => e.preventDefault());
         window.addEventListener('drop', (e) => e.preventDefault());
 
         els.mainInput.addEventListener('change', (e) => handleMainImage(e.target.files[0]));
         
-        // --- Main Image Card Drag & Drop ---
         ['dragenter', 'dragover'].forEach(evt => els.mainStepCard.addEventListener(evt, (e) => {
             e.preventDefault();
             e.stopPropagation();
             els.mainDragOverlay.classList.remove('hidden');
             els.mainDragOverlay.classList.add('flex');
         }));
-
         ['dragleave', 'drop'].forEach(evt => els.mainStepCard.addEventListener(evt, (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -563,16 +479,13 @@
             if(e.dataTransfer.files.length) handleMainImage(e.dataTransfer.files[0]);
         });
 
-        // --- Tile Drag & Drop Logic ---
         els.tileInput.addEventListener('change', (e) => handleTileImages(e.target.files));
-        
         ['dragenter', 'dragover'].forEach(evt => els.tileStepCard.addEventListener(evt, (e) => {
             e.preventDefault();
             e.stopPropagation();
             els.tileDragOverlay.classList.remove('hidden');
             els.tileDragOverlay.classList.add('flex');
         }));
-
         ['dragleave', 'drop'].forEach(evt => els.tileStepCard.addEventListener(evt, (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -581,16 +494,18 @@
                 els.tileDragOverlay.classList.remove('flex');
             }
         }));
-
         els.tileStepCard.addEventListener('drop', (e) => {
             if(e.dataTransfer.files.length) handleTileImages(e.dataTransfer.files);
         });
 
         els.clearTilesBtn.addEventListener('click', () => { state.tiles = []; updateTileUI(); });
 
-        // Update resolution state when select changes
         els.importQualitySelect.addEventListener('change', (e) => {
-            state.settings.importResolution = parseInt(e.target.value);
+            if (e.target.value === 'original') {
+                state.settings.importResolution = 'original';
+            } else {
+                state.settings.importResolution = parseInt(e.target.value);
+            }
         });
 
         els.resolutionRange.addEventListener('input', (e) => {
@@ -607,42 +522,37 @@
             els.blendValue.innerText = `${e.target.value}%`;
         });
         
-        // Removed diversityCheck listener
         els.colorCorrectCheck.addEventListener('change', (e) => state.settings.colorCorrect = e.target.checked);
 
         els.generateBtn.addEventListener('click', generateMosaic);
         els.downloadBtn.addEventListener('click', downloadImage);
 
-        // --- Zoom & Pan Event Listeners ---
         els.zoomInBtn.addEventListener('click', () => zoomCanvas(1.2));
         els.zoomOutBtn.addEventListener('click', () => zoomCanvas(0.8));
         els.zoomResetBtn.addEventListener('click', resetZoom);
 
-        // Pan Events (Mouse)
         els.canvasViewport.addEventListener('mousedown', startPan);
         window.addEventListener('mousemove', movePan);
         window.addEventListener('mouseup', endPan);
 
-        // Pan Events (Touch)
         els.canvasViewport.addEventListener('touchstart', (e) => {
             if(e.touches.length === 1) startPan(e.touches[0]);
         }, {passive: false});
         window.addEventListener('touchmove', (e) => {
             if(state.view.isDragging && e.touches.length === 1) {
-                e.preventDefault(); // Prevent scroll while panning
+                e.preventDefault();
                 movePan(e.touches[0]);
             }
         }, {passive: false});
         window.addEventListener('touchend', endPan);
 
-        // Wheel Zoom (Desktop)
         els.canvasViewport.addEventListener('wheel', (e) => {
             e.preventDefault();
             const factor = e.deltaY < 0 ? 1.1 : 0.9;
             zoomCanvas(factor);
         }, {passive: false});
 
-        // --- Handlers ---
+        // --- Logic Functions ---
 
         function handleMainImage(file) {
             if (!file || !file.type.startsWith('image/')) return;
@@ -661,11 +571,9 @@
             reader.readAsDataURL(file);
         }
 
-        // --- Modified: Removed shared anaCanvas to prevent race conditions ---
         async function handleTileImages(files) {
             if (!files.length) return;
             
-            // Show Card Overlay
             els.tileLoadingOverlay.classList.remove('hidden');
             els.tileLoadingOverlay.classList.add('flex');
             els.tileDragOverlay.classList.add('hidden'); 
@@ -676,25 +584,23 @@
             let processed = 0;
             const chunkSize = 5;
 
-            // Update current quality setting
-            state.settings.importResolution = parseInt(els.importQualitySelect.value) || 300;
+            // Update settings based on UI value
+            const qualityVal = els.importQualitySelect.value;
+            state.settings.importResolution = qualityVal === 'original' ? 'original' : parseInt(qualityVal);
 
             try {
                 for (let i = 0; i < fileList.length; i += chunkSize) {
                     const chunk = fileList.slice(i, i + chunkSize);
-                    // Modified: Removed shared canvas arguments
                     await Promise.all(chunk.map(file => processTile(file)));
                     
                     processed += chunk.length;
                     const pct = (processed / fileList.length) * 100;
                     updateProgress(pct);
-                    // Update card progress text
                     els.tileLoadingProgress.innerText = `${Math.round(pct)}%`;
                     
-                    await new Promise(r => setTimeout(r, 0)); // Yield
+                    await new Promise(r => setTimeout(r, 0));
                 }
             } finally {
-                // Hide Card Overlay when done (or error)
                 els.tileLoadingOverlay.classList.add('hidden');
                 els.tileLoadingOverlay.classList.remove('flex');
                 
@@ -704,12 +610,10 @@
             }
         }
 
-        // --- Modified processTile for Dynamic Quality ---
         function processTile(file) { 
             return new Promise(resolve => {
                 if (!file.type.startsWith('image/')) { resolve(); return; }
                 
-                // Create Independent Analysis Canvas per Tile (Prevents Race Conditions)
                 const anaCanvas = document.createElement('canvas');
                 const anaCtx = anaCanvas.getContext('2d');
                 anaCanvas.width = 50; 
@@ -718,38 +622,51 @@
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const tempImg = new Image(); 
-                    tempImg.onload = async () => { // async added for decode
+                    tempImg.onload = async () => {
                         try {
-                            // 1. Color Analysis
                             anaCtx.drawImage(tempImg, 0, 0, anaCanvas.width, anaCanvas.height);
                             const rgb = getSmartAverageColor(anaCtx, 0, 0, anaCanvas.width, anaCanvas.height);
                             const lab = ColorUtils.rgbToLab(rgb.r, rgb.g, rgb.b);
                             
-                            // 2. Optimized Thumbnail Creation
-                            // Use selected resolution
-                            const thumbSize = state.settings.importResolution; 
+                            // Resolution Logic
+                            let thumbSize;
+                            let quality;
+                            let usePng = false;
+
+                            if (state.settings.importResolution === 'original') {
+                                // Original mode: Use max dimensional limit but keep high quality
+                                thumbSize = Math.max(tempImg.width, tempImg.height);
+                                // Cap at reasonable max to prevent total crash (e.g. 2000px)
+                                if (thumbSize > 2000) thumbSize = 2000;
+                                usePng = true; // No compression
+                            } else {
+                                thumbSize = state.settings.importResolution;
+                                quality = thumbSize > 300 ? 0.95 : 0.8;
+                            }
+
                             const thumbCanvas = document.createElement('canvas');
                             thumbCanvas.width = thumbSize;
                             thumbCanvas.height = thumbSize;
                             const thumbCtx = thumbCanvas.getContext('2d');
                             
-                            // Better Thumbnail: Center Crop (Aspect Ratio Preserved)
                             const scale = Math.max(thumbSize / tempImg.width, thumbSize / tempImg.height);
                             const x = (thumbSize - tempImg.width * scale) / 2;
                             const y = (thumbSize - tempImg.height * scale) / 2;
                             thumbCtx.drawImage(tempImg, x, y, tempImg.width * scale, tempImg.height * scale);
 
-                            // 3. Create Lightweight Image Object
-                            // Higher quality JPEG for larger images
-                            const quality = thumbSize > 300 ? 0.9 : 0.8;
-                            const thumbDataUrl = thumbCanvas.toDataURL('image/jpeg', quality);
+                            // Compression Logic
+                            let thumbDataUrl;
+                            if (usePng) {
+                                thumbDataUrl = thumbCanvas.toDataURL('image/png');
+                            } else {
+                                thumbDataUrl = thumbCanvas.toDataURL('image/jpeg', quality);
+                            }
 
                             const finalThumbImg = new Image();
                             finalThumbImg.width = thumbSize;
                             finalThumbImg.height = thumbSize;
                             finalThumbImg.src = thumbDataUrl;
 
-                            // Wait for decode to ensure image is ready for canvas drawing
                             try {
                                 await finalThumbImg.decode();
                             } catch(e) {
@@ -760,12 +677,13 @@
                                 id: Math.random().toString(36).substr(2, 9),
                                 img: finalThumbImg, 
                                 rgb: rgb,
-                                lab: lab
+                                lab: lab,
+                                width: thumbSize,
+                                height: thumbSize
                             });
                         } catch(err) {
                             console.error("Tile processing error:", err);
                         } finally {
-                             // Memory Cleanup
                             if (tempImg.src.startsWith('blob:')) {
                                 URL.revokeObjectURL(tempImg.src);
                             }
@@ -802,15 +720,10 @@
             if(ok) els.generateBtn.classList.remove('opacity-50');
         }
 
-        // --- Zoom & Pan Logic ---
-
+        // --- Zoom Logic ---
         function startPan(e) {
             if (els.canvas.classList.contains('hidden')) return;
-            
-            // 修正: フィット状態（またはそれ以下）の場合はドラッグを開始しない
-            // わずかな計算誤差を許容するため 1.01倍 を閾値とする
             if (state.view.scale <= state.view.fitScale * 1.01) return;
-
             state.view.isDragging = true;
             state.view.lastX = e.clientX;
             state.view.lastY = e.clientY;
@@ -819,80 +732,58 @@
 
         function movePan(e) {
             if (!state.view.isDragging) return;
-            
             const dx = e.clientX - state.view.lastX;
             const dy = e.clientY - state.view.lastY;
             
-            // 現在の表示サイズとビューポートサイズを取得
             const currentW = els.canvas.width * state.view.scale;
             const currentH = els.canvas.height * state.view.scale;
             const vw = els.canvasViewport.clientWidth;
             const vh = els.canvasViewport.clientHeight;
 
-            // 修正: 移動範囲の制限（Clamping）を追加
-            // 画像が画面端から離れないようにする最大移動量を計算
             const maxTranslateX = Math.max(0, (currentW - vw) / 2);
             const maxTranslateY = Math.max(0, (currentH - vh) / 2);
 
-            // X軸の移動と制限
             if (currentW > vw) {
                 state.view.x += dx;
-                // 移動量が限界を超えないように制限
                 state.view.x = Math.max(-maxTranslateX, Math.min(maxTranslateX, state.view.x));
             } else {
-                state.view.x = 0; // 収まっている場合は強制的に中央
+                state.view.x = 0;
             }
 
-            // Y軸の移動と制限
             if (currentH > vh) {
                 state.view.y += dy;
-                // 移動量が限界を超えないように制限
                 state.view.y = Math.max(-maxTranslateY, Math.min(maxTranslateY, state.view.y));
             } else {
-                state.view.y = 0; // 収まっている場合は強制的に中央
+                state.view.y = 0;
             }
             
             state.view.lastX = e.clientX;
             state.view.lastY = e.clientY;
-            
             updateTransform();
         }
 
         function endPan() {
             state.view.isDragging = false;
-            // カーソルを戻す際も、ズーム状態に応じて変更すると親切だが、ここでは標準に戻す
             els.canvasViewport.style.cursor = 'grab';
         }
 
         function zoomCanvas(factor) {
             if (els.canvas.classList.contains('hidden')) return;
-            
             let newScale = state.view.scale * factor;
-            
-            // 修正: 縮小しすぎないように制限（フィットサイズより小さくしない）
-            // ただし、0.95倍程度までは許容して「バウンド」感を出すのもありだが、
-            // ここではフィットサイズを下限とする
             if (newScale < state.view.fitScale) newScale = state.view.fitScale;
-            if (newScale > 20) newScale = 20; // 上限は維持
-            
+            if (newScale > 50) newScale = 50; 
             state.view.scale = newScale;
-            
-            // ズームアウト時に移動位置が範囲外に残らないように位置を再調整（Clamp）
             clampPosition();
-            
             updateTransform();
         }
 
-        // 新規追加: ズーム操作時などに位置が範囲外に行かないよう補正する関数
         function clampPosition() {
             const currentW = els.canvas.width * state.view.scale;
             const currentH = els.canvas.height * state.view.scale;
             const vw = els.canvasViewport.clientWidth;
             const vh = els.canvasViewport.clientHeight;
-
             const maxTranslateX = Math.max(0, (currentW - vw) / 2);
             const maxTranslateY = Math.max(0, (currentH - vh) / 2);
-
             state.view.x = Math.max(-maxTranslateX, Math.min(maxTranslateX, state.view.x));
             state.view.y = Math.max(-maxTranslateY, Math.min(maxTranslateY, state.view.y));
         }
@@ -907,7 +798,6 @@
             const ch = els.canvas.height;
             if (cw === 0 || ch === 0) return;
 
-            // Reset height style first
             if (window.innerWidth < 1024) {
                  els.previewCard.style.height = 'auto';
             } else {
@@ -915,8 +805,6 @@
             }
 
             const vw = els.canvasViewport.clientWidth;
-            
-            // Mobile optimization
             if (window.innerWidth < 1024) {
                 const aspect = cw / ch;
                 const idealHeight = Math.min(vw / aspect, window.innerHeight * 0.6);
@@ -925,26 +813,20 @@
             }
 
             const vh = els.canvasViewport.clientHeight;
-
-            // Padding of 20px
             const scaleX = (vw - 40) / cw;
             const scaleY = (vh - 40) / ch;
             const scale = Math.min(scaleX, scaleY);
             
             state.view.scale = scale;
-            state.view.fitScale = scale; // 修正: 基準スケールを保存
+            state.view.fitScale = scale;
             state.view.x = 0;
             state.view.y = 0;
-            
             updateTransform();
         }
 
         function updateTransform() {
-            // movePanやclampPositionで座標制御しているため、ここでは単純に適用するだけで良い
             const { x, y, scale } = state.view;
             els.canvasTransform.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-            
-            // ズーム状態に応じてカーソルスタイルを変更（UX向上）
             if (scale > state.view.fitScale * 1.01) {
                 els.canvasViewport.style.cursor = state.view.isDragging ? 'grabbing' : 'grab';
             } else {
@@ -952,54 +834,83 @@
             }
         }
 
-        // --- Core Generation Logic (Restored) ---
+        // --- Core Generation Logic ---
         async function generateMosaic() {
             if (!state.mainImage) return;
             
             setLoading(true, "モザイク構築中...", "最適なピースをマッチング中");
             els.emptyState.classList.add('hidden');
-            els.zoomControls.classList.add('hidden'); // Hide controls during generation
-            els.canvas.classList.add('hidden'); // Hide canvas during generation
+            els.zoomControls.classList.add('hidden');
+            els.canvas.classList.add('hidden');
 
             const mainImg = state.mainImage;
             const tilesX = state.settings.tilesX;
             const aspect = mainImg.height / mainImg.width;
             const tilesY = Math.floor(tilesX * aspect);
 
-            // Output setup
             const canvas = els.canvas;
+            
+            // --- CRITICAL FIX: DYNAMIC OUTPUT SIZE CALCULATION ---
+            // Old Logic: Max 2400-3500px fixed
+            // New Logic: Scale based on "Import Quality" and "Tile Count"
+            
+            let targetTileWidth;
+            
+            if (state.settings.importResolution === 'original') {
+                targetTileWidth = 150; // Very large canvas for Original
+            } else if (state.settings.importResolution >= 800) {
+                targetTileWidth = 100;
+            } else if (state.settings.importResolution >= 300) {
+                targetTileWidth = 60;
+            } else {
+                targetTileWidth = 30; // Lightweight
+            }
+
+            // Calculate desired canvas width
+            let desiredWidth = tilesX * targetTileWidth;
+
+            // Safety Cap (Browser Canvas Limit varies, usually safely 8192px or 16384px)
+            // We cap at 12000px for safety on modern PCs, lower if mobile?
+            // Let's cap at 8000px to be safe across most devices, 12000px for Original
+            const maxSafeWidth = state.settings.importResolution === 'original' ? 12000 : 8000;
+            
+            if (desiredWidth > maxSafeWidth) {
+                desiredWidth = maxSafeWidth;
+                console.warn("Canvas width capped at max safe limit:", maxSafeWidth);
+            }
+            
+            // Ensure width is at least mainImg width (if main is small) or reasonable minimum
+            desiredWidth = Math.max(desiredWidth, 2000);
+
+            const outputScale = desiredWidth / mainImg.width;
+
+            canvas.width = Math.floor(mainImg.width * outputScale);
+            canvas.height = Math.floor(mainImg.height * outputScale);
+            
             const ctx = canvas.getContext('2d', { willReadFrequently: true });
             
-            // Increase output resolution calculation slightly for better zoom detail
-            // was 2400 max, bumping to 3000 if high res tiles are available
-            const maxRes = state.settings.importResolution > 300 ? 3500 : 2400;
-            const outputScale = Math.min(maxRes / mainImg.width, 2.5); 
-            canvas.width = mainImg.width * outputScale;
-            canvas.height = mainImg.height * outputScale;
-            
+            // Smooth scaling setting
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+
             const tileW = canvas.width / tilesX;
             const tileH = canvas.height / tilesY;
 
-            // 1. Analyze Main Image
+            // 1. Analyze Main Image (Downsample for color matching)
             const srcCanvas = document.createElement('canvas');
             srcCanvas.width = tilesX;
             srcCanvas.height = tilesY;
             const srcCtx = srcCanvas.getContext('2d');
             srcCtx.drawImage(mainImg, 0, 0, tilesX, tilesY);
-            
             const srcData = srcCtx.getImageData(0, 0, tilesX, tilesY).data;
 
             // 2. Matching
             const gridMap = Array(tilesY).fill(null).map(() => Array(tilesX).fill(null));
             const totalCells = tilesX * tilesY;
             const batchSize = 50;
-
             const useDiversity = state.settings.diversity && state.tiles.length > 20;
             const hasTiles = state.tiles.length > 0;
-            
-            // Usage Tracking
-            const tileUsageCount = {}; // Maps tile ID to usage count
-            // Initialize usage counts
+            const tileUsageCount = {};
             state.tiles.forEach(t => tileUsageCount[t.id] = 0);
 
             for (let i = 0; i < totalCells; i++) {
@@ -1010,7 +921,6 @@
 
                 const gx = i % tilesX;
                 const gy = Math.floor(i / tilesX);
-
                 const idx = i * 4;
                 const tr = srcData[idx];
                 const tg = srcData[idx+1];
@@ -1021,50 +931,44 @@
                 
                 if (hasTiles) {
                     let minScore = Infinity;
-                    
                     for (const tile of state.tiles) {
                         let score = ColorUtils.deltaE(targetLab, tile.lab);
-
-                        // Apply Diversity Logic
                         if (useDiversity) {
-                            // 1. Global Frequency Penalty (Use count penalty)
                             const count = tileUsageCount[tile.id] || 0;
                             score += count * 4.0;
-
-                            // 2. Local Neighborhood Penalty
-                            if (gx > 0 && gridMap[gy][gx-1] === tile.id) score += 100; // Left
-                            if (gy > 0 && gridMap[gy-1][gx] === tile.id) score += 100; // Top
-                            if (gy > 0 && gx > 0 && gridMap[gy-1][gx-1] === tile.id) score += 50; // Top-Left
-                            if (gy > 0 && gx < tilesX-1 && gridMap[gy-1][gx+1] === tile.id) score += 50; // Top-Right
+                            if (gx > 0 && gridMap[gy][gx-1] === tile.id) score += 100;
+                            if (gy > 0 && gridMap[gy-1][gx] === tile.id) score += 100;
+                            if (gy > 0 && gx > 0 && gridMap[gy-1][gx-1] === tile.id) score += 50;
+                            if (gy > 0 && gx < tilesX-1 && gridMap[gy-1][gx+1] === tile.id) score += 50;
                         }
-
                         if (score < minScore) {
                             minScore = score;
                             bestTile = tile;
                         }
                     }
-
-                    // Register usage
                     if (bestTile) {
                         gridMap[gy][gx] = bestTile.id;
-                        tileUsageCount[bestTile.id]++; // Increment count
+                        tileUsageCount[bestTile.id]++;
                     }
                 }
 
-                // Draw
                 const dx = gx * tileW;
                 const dy = gy * tileH;
 
+                // Use 'floor' to avoid sub-pixel gaps (though slight overlap is better)
+                // We add small overlap
+                const drawW = tileW + 0.5;
+                const drawH = tileH + 0.5;
+
                 if (bestTile) {
-                    ctx.drawImage(bestTile.img, dx, dy, tileW, tileH);
-                    
+                    ctx.drawImage(bestTile.img, dx, dy, drawW, drawH);
                     if (state.settings.colorCorrect) {
                         ctx.fillStyle = `rgba(${tr},${tg},${tb}, 0.25)`;
-                        ctx.fillRect(dx, dy, tileW, tileH);
+                        ctx.fillRect(dx, dy, drawW, drawH);
                     }
                 } else {
                     ctx.fillStyle = `rgb(${tr},${tg},${tb})`;
-                    ctx.fillRect(dx, dy, tileW, tileH);
+                    ctx.fillRect(dx, dy, drawW, drawH);
                 }
             }
 
@@ -1079,23 +983,18 @@
             setLoading(false);
             els.downloadBtn.disabled = false;
             
-            // Show canvas and reset zoom
             els.canvas.classList.remove('hidden');
             els.zoomControls.classList.remove('hidden');
             fitCanvasToViewport();
             
-            // NEW: Auto-scroll to preview result on completion
-            // Using setTimeout to ensure layout update is complete
             setTimeout(() => {
                 els.canvasViewport.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 100);
             
-            // Status message update
             els.statusMessage.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> 生成完了 (${canvas.width}x${canvas.height}px)`;
             lucide.createIcons();
         }
 
-        // --- UI Utils ---
         function setLoading(active, text, subtext = "") {
             state.isProcessing = active;
             if(active) {
@@ -1118,17 +1017,16 @@
             els.progressText.innerText = `${Math.round(pct)}%`;
         }
 
-        // --- UPDATED: Date Format Download ---
         function downloadImage() {
             const link = document.createElement('a');
-            
             const now = new Date();
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
             const dateStr = `${year}${month}${day}`;
-
             link.download = `${dateStr}_mosaic_art.png`;
+            // For huge canvases, toDataURL might fail or be slow.
+            // But usually it works.
             link.href = els.canvas.toDataURL('image/png', 0.9);
             link.click();
         }
