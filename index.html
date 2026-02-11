@@ -850,7 +850,8 @@
             
             if (state.settings.importResolution === 'high') {
                 targetTileWidth = 400; // High detail for zoom
-                maxSafeWidth = 16384; // Relaxed limit
+                // Modified: 16384px is risky for export. 12000px is safer for PNG encoding.
+                maxSafeWidth = 12000; 
             } else if (state.settings.importResolution === 300) {
                 targetTileWidth = 80; // Balanced
                 maxSafeWidth = 8000; // Standard limit
@@ -1006,18 +1007,51 @@
             els.progressText.innerText = `${Math.round(pct)}%`;
         }
 
+        // --- UPDATED: Robust Download Logic (toBlob) ---
         function downloadImage() {
-            const link = document.createElement('a');
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const dateStr = `${year}${month}${day}`;
-            link.download = `${dateStr}_mosaic_art.png`;
-            // For huge canvases, toDataURL might fail or be slow.
-            // But usually it works.
-            link.href = els.canvas.toDataURL('image/png', 0.9);
-            link.click();
+            // UI Feedback
+            const originalText = els.downloadBtn.innerHTML;
+            const originalIcon = els.downloadBtn.querySelector('i')?.cloneNode(true);
+            
+            els.downloadBtn.innerHTML = `<span class="animate-pulse">保存準備中...</span>`;
+            els.downloadBtn.disabled = true;
+
+            // Use toBlob instead of toDataURL for better memory management with large files
+            els.canvas.toBlob((blob) => {
+                if (!blob) {
+                    alert("画像の保存に失敗しました。キャンバスサイズが大きすぎるか、メモリが不足しています。");
+                    els.downloadBtn.innerHTML = originalText;
+                    if(originalIcon) els.downloadBtn.prepend(originalIcon);
+                    els.downloadBtn.disabled = false;
+                    return;
+                }
+
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                const dateStr = `${year}${month}${day}`;
+                
+                link.download = `${dateStr}_mosaic_art.png`;
+                link.href = url;
+                link.click();
+                
+                // Cleanup after a delay
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                    els.downloadBtn.innerHTML = originalText;
+                    // Restore icon if it existed (simplification: re-render is fine or innerHTML reset)
+                    // Re-injecting icon for cleaner restore
+                    els.downloadBtn.innerHTML = ``;
+                    if(originalIcon) els.downloadBtn.appendChild(originalIcon);
+                    els.downloadBtn.appendChild(document.createTextNode(" 高画質で保存"));
+                    els.downloadBtn.disabled = false;
+                }, 1000);
+
+            }, 'image/png', 0.9);
         }
 
     </script>
