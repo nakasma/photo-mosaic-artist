@@ -262,9 +262,14 @@
                     
                     <div class="flex items-center gap-3">
                         <span id="statusMessage" class="text-xs text-gray-500 hidden sm:flex items-center gap-2"></span>
-                        <button id="downloadBtn" disabled class="bg-gray-800 hover:bg-gray-900 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-2 px-4 rounded-lg shadow transition-all flex items-center gap-2 text-sm">
-                            <i data-lucide="download" class="w-4 h-4"></i>
-                            <span class="whitespace-nowrap">高画質で保存</span>
+                        
+                        <!-- Updated Download Button: Stylish UI & New Text -->
+                        <button id="downloadBtn" disabled class="group relative overflow-hidden bg-gradient-to-r from-slate-700 to-slate-900 hover:from-slate-600 hover:to-slate-800 disabled:from-gray-200 disabled:to-gray-300 disabled:cursor-not-allowed text-white font-bold py-2.5 px-5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 flex items-center gap-2 text-sm">
+                            <!-- Shine effect -->
+                            <div class="absolute inset-0 bg-white/10 translate-x-[-100%] skew-x-[-15deg] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+                            
+                            <i data-lucide="download" class="w-4 h-4 relative z-10 group-hover:scale-110 transition-transform"></i>
+                            <span class="whitespace-nowrap relative z-10 tracking-wide">画像を保存</span>
                         </button>
                     </div>
                 </div>
@@ -1013,7 +1018,8 @@
             const originalText = els.downloadBtn.innerHTML;
             const originalIcon = els.downloadBtn.querySelector('i')?.cloneNode(true);
             
-            els.downloadBtn.innerHTML = `<span class="animate-pulse">保存準備中...</span>`;
+            // Updated Loading Text
+            els.downloadBtn.innerHTML = `<span class="animate-pulse flex items-center gap-2"><div class="w-3 h-3 border-2 border-white/50 border-t-white rounded-full animate-spin"></div> 保存中...</span>`;
             els.downloadBtn.disabled = true;
 
             // Use toBlob instead of toDataURL for better memory management with large files
@@ -1042,12 +1048,10 @@
                 // Cleanup after a delay
                 setTimeout(() => {
                     URL.revokeObjectURL(url);
-                    els.downloadBtn.innerHTML = originalText;
-                    // Restore icon if it existed (simplification: re-render is fine or innerHTML reset)
-                    // Re-injecting icon for cleaner restore
+                    // Updated Restore Text
                     els.downloadBtn.innerHTML = ``;
                     if(originalIcon) els.downloadBtn.appendChild(originalIcon);
-                    els.downloadBtn.appendChild(document.createTextNode(" 高画質で保存"));
+                    els.downloadBtn.appendChild(document.createTextNode(" 画像を保存"));
                     els.downloadBtn.disabled = false;
                 }, 1000);
 
