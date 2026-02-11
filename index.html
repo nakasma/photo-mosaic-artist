@@ -190,13 +190,12 @@
                             <span class="text-[10px] text-gray-500 bg-white px-1.5 py-0.5 rounded border border-gray-200">※追加前に選択</span>
                         </div>
                         <select id="importQualitySelect" class="w-full text-sm bg-white border border-gray-300 text-gray-700 rounded-md py-2 px-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none shadow-sm">
-                            <option value="100">【軽量】100px (動作重視)</option>
-                            <option value="300" selected>【標準】300px (バランス)</option>
-                            <option value="800">【高画質】800px (綺麗にズーム)</option>
-                            <option value="original">【オリジナル】元画像 (PC・Wi-Fi推奨)</option>
+                            <option value="100">【軽量】100px（スマホ推奨）</option>
+                            <option value="300" selected>【標準】300px（バランス）</option>
+                            <option value="high">【高画質】(PC推奨 - 制限緩和)</option>
                         </select>
                         <p class="text-[10px] text-gray-500 mt-1.5 leading-tight">
-                            ※「オリジナル」を選択すると、生成時のキャンバスサイズが巨大になり、ズームしても写真がくっきり見えますが、メモリを大量に消費します。
+                            ※「高画質」を選択すると、キャンバスサイズの制限が緩和され（最大16384px）、ズーム時に非常に鮮明になりますが、メモリ消費量が増加します。
                         </p>
                     </div>
 
@@ -501,8 +500,8 @@
         els.clearTilesBtn.addEventListener('click', () => { state.tiles = []; updateTileUI(); });
 
         els.importQualitySelect.addEventListener('change', (e) => {
-            if (e.target.value === 'original') {
-                state.settings.importResolution = 'original';
+            if (e.target.value === 'high') {
+                state.settings.importResolution = 'high';
             } else {
                 state.settings.importResolution = parseInt(e.target.value);
             }
@@ -586,7 +585,7 @@
 
             // Update settings based on UI value
             const qualityVal = els.importQualitySelect.value;
-            state.settings.importResolution = qualityVal === 'original' ? 'original' : parseInt(qualityVal);
+            state.settings.importResolution = qualityVal === 'high' ? 'high' : parseInt(qualityVal);
 
             try {
                 for (let i = 0; i < fileList.length; i += chunkSize) {
@@ -633,15 +632,13 @@
                             let quality;
                             let usePng = false;
 
-                            if (state.settings.importResolution === 'original') {
-                                // Original mode: Use max dimensional limit but keep high quality
-                                thumbSize = Math.max(tempImg.width, tempImg.height);
-                                // Cap at reasonable max to prevent total crash (e.g. 2000px)
-                                if (thumbSize > 2000) thumbSize = 2000;
-                                usePng = true; // No compression
+                            if (state.settings.importResolution === 'high') {
+                                // High Quality mode: Large thumbnails for zoom
+                                thumbSize = 800; // Sufficient for 400px rendering
+                                quality = 0.92;
                             } else {
                                 thumbSize = state.settings.importResolution;
-                                quality = thumbSize > 300 ? 0.95 : 0.8;
+                                quality = thumbSize > 100 ? 0.9 : 0.8;
                             }
 
                             const thumbCanvas = document.createElement('canvas');
@@ -655,12 +652,7 @@
                             thumbCtx.drawImage(tempImg, x, y, tempImg.width * scale, tempImg.height * scale);
 
                             // Compression Logic
-                            let thumbDataUrl;
-                            if (usePng) {
-                                thumbDataUrl = thumbCanvas.toDataURL('image/png');
-                            } else {
-                                thumbDataUrl = thumbCanvas.toDataURL('image/jpeg', quality);
-                            }
+                            let thumbDataUrl = thumbCanvas.toDataURL('image/jpeg', quality);
 
                             const finalThumbImg = new Image();
                             finalThumbImg.width = thumbSize;
@@ -851,29 +843,26 @@
             const canvas = els.canvas;
             
             // --- CRITICAL FIX: DYNAMIC OUTPUT SIZE CALCULATION ---
-            // Old Logic: Max 2400-3500px fixed
             // New Logic: Scale based on "Import Quality" and "Tile Count"
             
             let targetTileWidth;
+            let maxSafeWidth;
             
-            if (state.settings.importResolution === 'original') {
-                targetTileWidth = 150; // Very large canvas for Original
-            } else if (state.settings.importResolution >= 800) {
-                targetTileWidth = 100;
-            } else if (state.settings.importResolution >= 300) {
-                targetTileWidth = 60;
+            if (state.settings.importResolution === 'high') {
+                targetTileWidth = 400; // High detail for zoom
+                maxSafeWidth = 16384; // Relaxed limit
+            } else if (state.settings.importResolution === 300) {
+                targetTileWidth = 80; // Balanced
+                maxSafeWidth = 8000; // Standard limit
             } else {
                 targetTileWidth = 30; // Lightweight
+                maxSafeWidth = 4000; // Conservative limit
             }
 
             // Calculate desired canvas width
             let desiredWidth = tilesX * targetTileWidth;
 
-            // Safety Cap (Browser Canvas Limit varies, usually safely 8192px or 16384px)
-            // We cap at 12000px for safety on modern PCs, lower if mobile?
-            // Let's cap at 8000px to be safe across most devices, 12000px for Original
-            const maxSafeWidth = state.settings.importResolution === 'original' ? 12000 : 8000;
-            
+            // Safety Cap
             if (desiredWidth > maxSafeWidth) {
                 desiredWidth = maxSafeWidth;
                 console.warn("Canvas width capped at max safe limit:", maxSafeWidth);
